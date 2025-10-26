@@ -9,6 +9,7 @@ Askia is a Retrieval-Augmented Generation (RAG) chatbot designed to provide accu
 - 🔍 Context-aware responses
 - 📱 Telegram bot interface
 - 🚀 Fast and efficient RAG architecture
+- ⚡ Easy document ingestion with `setup_database.sh`
 
 ## Prerequisites
 
@@ -17,37 +18,91 @@ Askia is a Retrieval-Augmented Generation (RAG) chatbot designed to provide accu
 - Google API key for Gemini Pro
 - Telegram Bot Token from [@BotFather](https://t.me/botfather)
 
-## Setup
+## Quick Start
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd Askia
+   git clone https://github.com/bkyalo/askai.git
+   cd askai
    ```
 
-2. **Create a virtual environment**
+2. **Set up the environment**
    ```bash
+   # Create and activate virtual environment
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
+   
+   # Install dependencies
    pip install -r requirements.txt
    ```
 
-4. **Set up environment variables**
-   Create a `.env` file in the project root with the following content:
-   ```
-   TELEGRAM_TOKEN=your_telegram_bot_token
-   GOOGLE_API_KEY=your_google_gemini_api_key
+3. **Configure environment variables**
+   Create a `.env` file with your API keys:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your actual API keys
    ```
 
-5. **Add your documents**
-   Create a `documents` folder and add your PDF files:
+4. **Add your documents**
+   ```bash
+   mkdir -p documents
+   # Copy your PDF files to the documents/ directory
    ```
-   mkdir documents
-   # Copy your PDF files here
+
+5. **Initialize the database**
+   ```bash
+   chmod +x setup_database.sh
+   ./setup_database.sh
+   ```
+
+6. **Start the bot**
+   ```bash
+   python app.py
+   ```
+
+## Updating Documents
+
+To update the knowledge base with new documents:
+
+1. Add new PDF files to the `documents/` directory
+2. Run the setup script again:
+   ```bash
+   ./setup_database.sh
+   ```
+   This will rebuild the entire vector database with all documents.
+
+## Project Structure
+
+```
+.
+├── app.py              # Main application entry point
+├── config.py           # Configuration settings
+├── database.py         # Vector database operations
+├── document_loader.py  # Document processing utilities
+├── requirements.txt    # Python dependencies
+└── documents/          # Directory for knowledge base documents
+    └── *.pdf           # PDF documents for the knowledge base
+```
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `TELEGRAM_TOKEN` | Your Telegram bot token from @BotFather | ✅ |
+| `GOOGLE_API_KEY` | Google Gemini API key | ✅ |
+| `CHROMA_DB_PATH` | Path to store the vector database (default: `chroma_db/`) | ❌ |
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
    ```
 
 6. **Load documents into the knowledge base**
