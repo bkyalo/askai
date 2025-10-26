@@ -29,20 +29,40 @@ def check_database():
         load_documents()
         
 def load_documents():
-    """Load documents into the database if not already loaded"""
+    """Load documents into the database"""
     print("\n=== Loading Documents ===")
     from document_loader import DocumentLoader
     
     try:
+        # Clear existing database
+        print("Clearing existing database...")
+        db.collection.delete(where={"source": {"$ne": ""}})
+        
+        # Load documents
         loader = DocumentLoader()
         documents = loader.load_directory('documents')
-        print(f"Loaded {len(documents)} document chunks")
+        print(f"\nLoaded {len(documents)} document chunks")
         
         # Add to database
+        print("Adding documents to the database...")
         db.add_documents(documents)
-        print("Documents added to the knowledge base.")
+        
+        # Verify count
+        count = db.collection.count()
+        print(f"\nSuccessfully added {count} document chunks to the database.")
+        print(f"Documents in database: {count}")
+        
+        # Print sample of added documents
+        print("\nSample of added documents:")
+        results = db.collection.get(limit=3)
+        for i, (text, metadata) in enumerate(zip(results['documents'], results['metadatas'])):
+            print(f"\n--- Document {i+1} ---")
+            print(f"Source: {metadata['source']}")
+            print(f"Content: {text[:200]}..." if len(text) > 200 else f"Content: {text}")
+            
     except Exception as e:
         print(f"Error loading documents: {e}")
+        raise
 
 def test_search(query):
     print(f"\n=== Testing search for: '{query}' ===")
@@ -67,7 +87,7 @@ if __name__ == "__main__":
     
     # Test with some queries
     test_queries = [
-        "COVID-19 symptoms",
+        "Malaria symptoms",
         "health guidelines",
         "prevention measures"
     ]
