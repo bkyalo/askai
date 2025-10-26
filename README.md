@@ -15,7 +15,7 @@ Askia is a Retrieval-Augmented Generation (RAG) chatbot designed to provide accu
 
 - Python 3.8+
 - Telegram account
-- Google API key for Gemini Pro
+- OpenAI API key
 - Telegram Bot Token from [@BotFather](https://t.me/botfather)
 
 ## Quick Start
@@ -37,10 +37,15 @@ Askia is a Retrieval-Augmented Generation (RAG) chatbot designed to provide accu
    ```
 
 3. **Configure environment variables**
-   Create a `.env` file with your API keys:
+   Create a `.env` file with your API key:
    ```bash
    cp .env.example .env
-   # Edit .env with your actual API keys
+   # Edit .env with your OpenAI API key
+   ```
+   Your `.env` file should look like this:
+   ```
+   TELEGRAM_TOKEN=your_telegram_bot_token
+   OPENAI_API_KEY=your_openai_api_key
    ```
 
 4. **Add your documents**
@@ -89,7 +94,7 @@ To update the knowledge base with new documents:
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `TELEGRAM_TOKEN` | Your Telegram bot token from @BotFather | ✅ |
-| `GOOGLE_API_KEY` | Google Gemini API key | ✅ |
+| `OPENAI_API_KEY` | Your OpenAI API key | ✅ |
 | `CHROMA_DB_PATH` | Path to store the vector database (default: `chroma_db/`) | ❌ |
 
 ## Contributing
